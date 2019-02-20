@@ -1,5 +1,5 @@
 ///*
-// * Create a variables that holds all of your cards, stars, cards on deck, success pairs and number of moves.
+// * Create a variables that holds all of your cards, stars, cards on deck, success pairs, totalTime, recordtime, recordmove, startTime and number of moves.
 // */
 let allCards = document.querySelectorAll('.card');
 let stars = document.querySelector('.stars').querySelectorAll('li');
@@ -8,15 +8,14 @@ let starCount;
 let successPairs = 1;
 let moves = 0;
 let cardOnDeck = [];
-const startTime = performance.now();
+let startTime = performance.now();
 let totalTime = 0;
+let recordtime = 0;
+let recordmove = 0;
 
 
 /*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
+ * Shuffle the Card with Repeat Click
  */
 let shuffleCards = document.querySelector('.fa-repeat');
 shuffleCards.addEventListener('click', function(){
@@ -24,17 +23,7 @@ shuffleCards.addEventListener('click', function(){
     ResetAll();
 });
 
-// Call Onload Event.
-//window.onload = ResetAll;
-
 function ResetAll() {
-    // Reset the success and moves Counters.
-    successPairs = 1;
-    moves = 0;
-
-    // Reset moves;
-    IncrementMoves(moves);
-
     setTimeout(function () {
 
         // Hide all Cards
@@ -49,7 +38,15 @@ function ResetAll() {
         // Add cards to Document.
         AddCards(allCards);
 
-    });
+    }, 100);
+
+    // Reset the success and moves, and time Counters
+    successPairs = 1;
+    moves = 0;
+    startTime = performance.now();
+
+    // Reset moves;
+    IncrementMoves(moves);
 }
 
 function HideCards(allCards) {
@@ -147,17 +144,6 @@ function shuffle(array) {
 }
 
 /*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
-
-/*
     In case a card is clicked.
 */
 allCards.forEach(function (card) {
@@ -229,7 +215,7 @@ function NonMatch(card) {
 
         // set cardOnDeck to empty.
         cardOnDeck = [];
-    }, 1000);
+    }, 500);
 }
 
 /*
@@ -267,9 +253,32 @@ function Success(successPairs) {
         let totalCaption = document.querySelector('.endtotaltime');
         totalCaption.textContent = caption.concat(MillisecondToMinuteAndSecond(totalTime), " seconds.");
 
+        // Show Current Record time/move.
+        ShowRecord();
         successPairs = 1;
 
     }, 500);
+}
+
+/*
+    Show Record Time/Move.
+*/
+function ShowRecord() {
+    let timeRecordcaption = document.querySelector('.recordtime');
+    let moveRecordcaption = document.querySelector('.recordmove');
+
+    // change recordmove if current move is less.
+    if (moves < recordmove || recordmove === 0) {
+        recordmove = moves;
+    }
+
+    // change recordtime if current totaltime is less.
+    if (totalTime < recordtime || recordtime === 0) {
+        recordtime = totalTime;
+    }
+
+    timeRecordcaption.textContent = MillisecondToMinuteAndSecond(recordtime);
+    moveRecordcaption.textContent = recordmove;
 }
 
 /*

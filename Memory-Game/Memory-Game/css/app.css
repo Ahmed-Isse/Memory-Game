@@ -151,7 +151,7 @@ p {
 }
 
 #btnokay {
-    height: 24px;
+    height: 28px;
     margin-top: 14px;
     background-color:  #40E0D0;
     display: inline-block;
@@ -168,4 +168,10 @@ p {
 
 .endtotaltime {
     width: 100%;
+}
+
+.record {
+    font-size: 1em;
+    font-weight: 300;
+    color: #0A8A0A;
 }
